@@ -5,33 +5,60 @@ Inductive AE : Type :=
     | Hole
 .
 
-Definition included (ae:AE) : bool :=
+Inductive ChangelogStatus : Type :=
+    | Unchanged
+    | Added
+    | Removed
+    | Modified
+.
+
+Inductive Transformation : Type :=
+    | L1_to_core
+    | Core_to_L2
+.
+
+Definition changelogMapping (ae:AE) : ChangelogStatus :=
     match ae with 
-    | Num n => true
-    | Add x y => true
-    | Sub x y => false
-    | Hole => false
+    | Num n => Unchanged
+    | Add x y => Unchanged
+    | Sub x y => Removed
+    | Hole => Removed
 end.
 
-Fixpoint parseAndRemove (ae:AE) 
+Definition included (t:Transformation) (ae:AE) : bool :=
+    match changelogMapping (ae) with
+    | Unchanged => true
+    | Added =>
+        match t with
+        | L1_to_core => false
+        | Core_to_L2 => true 
+        (* Only allow on second translation *)
+        end
+    | Removed => false
+    | Modified => false
+end.
+
+Fixpoint parseAndRemove (t:Transformation) (ae:AE) 
   : AE :=
     match ae with 
     | Num n => 
-        if included(ae) 
+        if included t ae 
         then Num n 
         else Hole
     | Add x y => 
-        if included(ae)
-        then Add (parseAndRemove x) (parseAndRemove y)
+        if included t ae
+        then Add (parseAndRemove t x) (parseAndRemove t y)
         else Hole
     | Sub x y =>
-        if included(ae)
-        then Sub (parseAndRemove x) (parseAndRemove y)
+        if included t ae
+        then Sub (parseAndRemove t x) (parseAndRemove t y)
         else Hole
     | Hole => Hole
 end.
 
-Compute parseAndRemove(
+Compute parseAndRemove
+L1_to_core
+(
 Add 
     (Num 1) 
     (Sub 
