@@ -1,3 +1,6 @@
+Require Coq.extraction.Extraction.
+Extraction Language OCaml.
+
 Inductive AE : Type :=
     | Num (n:nat)
     | Add (x:AE) (y:AE)
@@ -38,7 +41,7 @@ Definition included (t:Transformation) (ae:AE) : bool :=
     | Modified => false
 end.
 
-Fixpoint parseAndRemove (t:Transformation) (ae:AE) 
+Fixpoint preprocess (t:Transformation) (ae:AE) 
   : AE :=
     match ae with 
     | Num n => 
@@ -47,16 +50,16 @@ Fixpoint parseAndRemove (t:Transformation) (ae:AE)
         else Hole
     | Add x y => 
         if included t ae
-        then Add (parseAndRemove t x) (parseAndRemove t y)
+        then Add (preprocess t x) (preprocess t y)
         else Hole
     | Sub x y =>
         if included t ae
-        then Sub (parseAndRemove t x) (parseAndRemove t y)
+        then Sub (preprocess t x) (preprocess t y)
         else Hole
     | Hole => Hole
 end.
 
-Compute parseAndRemove
+Compute preprocess
 L1_to_core
 (
 Add 
@@ -68,13 +71,4 @@ Add
     
 ).
 
-Inductive ID : Type :=
-Admitted.
-
-Inductive Expr : Type :=
-    | Fix (f : ID) (x: ID) (e: Expr)
-    | App (e1 : Expr) (e2 : Expr)
-    | X (x : ID)
-    | Parens
-    | Sequence (e1: Expr) (e2: Expr)
-.
+Extraction "preprocessor.ml" preprocess. 
