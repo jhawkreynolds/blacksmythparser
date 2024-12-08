@@ -2,9 +2,12 @@ Require Coq.extraction.Extraction.
 Extraction Language OCaml.
 
 Inductive AE : Type :=
-    | Num (n:nat)
+    | EInt (n:nat)
+    | Neg (x:AE)
     | Add (x:AE) (y:AE)
     | Sub (x:AE) (y:AE)
+    | Mul (x:AE) (y:AE)
+    | Div (x:AE) (y:AE)
     | Hole
 .
 
@@ -25,6 +28,8 @@ Definition changelogMapping (ae:AE) : ChangelogStatus :=
     | Num n => Unchanged
     | Add x y => Unchanged
     | Sub x y => Removed
+    | Mul x y => Unchanged
+    | Div x y => Unchanged
     | Hole => Removed
 end.
 
@@ -43,21 +48,17 @@ end.
 
 Fixpoint preprocess (t:Transformation) (ae:AE) 
   : AE :=
-    match ae with 
-    | Num n => 
-        if included t ae 
-        then Num n 
-        else Hole
-    | Add x y => 
-        if included t ae
-        then Add (preprocess t x) (preprocess t y)
-        else Hole
-    | Sub x y =>
-        if included t ae
-        then Sub (preprocess t x) (preprocess t y)
-        else Hole
+if included t ae then
+    match ae with
+    | Num n => Num n
+    | Neg x => Neg (preprocess t x)
+    | Add x y => Add (preprocess t x) (preprocess t y)
+    | Sub x y => Sub (preprocess t x) (preprocess t y)
+    | Mul x y => Mul (preprocess t x) (preprocess t y)
+    | Div x y => Div (preprocess t x) (preprocess t y)
     | Hole => Hole
-end.
+    end
+else Hole.
 
 Compute preprocess
 L1_to_core
@@ -71,4 +72,5 @@ Add
     
 ).
 
-Extraction "preprocessor.ml" preprocess. 
+
+(* Extraction "preprocessor.ml" preprocess. *)

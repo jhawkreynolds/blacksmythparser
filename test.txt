@@ -1,6 +1,24 @@
+type Nat = Z () | S Nat
+type NatList
+  = Nil () | Cons (Nat, NatList)
 
-// This is a line comment
+max : Nat -> Nat -> Nat
+max m n =
+    ??
 
-let x = 3 * 8 / (2 - 10) in
-let foo = x + 4 - 10 * -x in
-foo
+maxplus : Nat -> Nat -> Nat
+maxplus m n =
+    S ( maxa m n )
+
+maxplus2 : Nat -> Nat -> Nat
+maxplus2 m n =
+    S ( S ( maxa m n ) )
+
+maxplus3 : Nat -> Nat -> Nat
+maxplus3 m n =
+    S ( S ( S ( maxa m n ) ) )
+
+specifyFunction2 maxplus[
+    (0,0,1), (1,0,2), (0,1,2), (1,1,2), (2,1,3), (1,2,3), (2,2,3),
+    (3,4,5), (4,3,5)
+]
