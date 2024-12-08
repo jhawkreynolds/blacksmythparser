@@ -1,0 +1,8 @@
+plus : Nat -> Nat -> Nat
+plus m n =
+  case m of
+    Z _ ->
+      n
+
+    S m_ ->
+      S (plus m_ n)

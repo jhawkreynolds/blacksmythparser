@@ -1,0 +1,7 @@
+append : NatList -> NatList -> NatList
+append xs ys =
+  case xs of
+    Nil _ ->
+      ys
+    Cons (head, tail) ->
+      Cons (head, append tail ys)
