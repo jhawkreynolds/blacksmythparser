@@ -1,0 +1,4 @@
+Max : Nat -> Nat -> Nat
+Min : Nat -> Nat -> Nat
+len : NatList -> Nat
+superFunc : NatList -> NatList -> NatList -> Nat -> Nat -> Nat -> Nat -> Bool
