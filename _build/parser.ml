@@ -38,34 +38,34 @@ type ('s, 'r) _menhir_state =
 
 
 and ('s, 'r) _menhir_cell1_expr = 
-  | MenhirCell1_expr of 's * ('s, 'r) _menhir_state * (Ast.expr)
+  | MenhirCell1_expr of 's * ('s, 'r) _menhir_state * (Ast.expr list)
 
 and _menhir_box_main = 
-  | MenhirBox_main of (Ast.expr) [@@unboxed]
+  | MenhirBox_main of (Ast.expr list) [@@unboxed]
 
 let _menhir_action_1 =
   fun f ->
     (
 # 26 "parser.mly"
-    ( EFoo(f) )
+    ( [EFoo(f)] )
 # 52 "parser.ml"
-     : (Ast.expr))
+     : (Ast.expr list))
 
 let _menhir_action_2 =
   fun e ->
     (
 # 16 "parser.mly"
-    ( EBar(e, ENil) )
+    ( e )
 # 60 "parser.ml"
-     : (Ast.expr))
+     : (Ast.expr list))
 
 let _menhir_action_3 =
   fun e1 e2 ->
     (
 # 20 "parser.mly"
-    ( EBar(e1, e2) )
+    ( e1 @ e2 )
 # 68 "parser.ml"
-     : (Ast.expr))
+     : (Ast.expr list))
 
 let _menhir_action_4 =
   fun e ->
@@ -73,7 +73,7 @@ let _menhir_action_4 =
 # 22 "parser.mly"
     ( e )
 # 76 "parser.ml"
-     : (Ast.expr))
+     : (Ast.expr list))
 
 let _menhir_print_token : token -> string =
   fun _tok ->

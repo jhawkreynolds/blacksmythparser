@@ -7,20 +7,20 @@
 %token EOF
 
 %start main
-%type <expr> main
+%type <expr list> main
 
 %%
 
 main:
   | e = rec_expr EOF
-    { EBar(e, ENil) }
+    { e }
 
 rec_expr:
   | e1 = expr e2 = rec_expr
-    { EBar(e1, e2) }
+    { e1 @ e2 }
   | e = expr
     { e }
 
 expr:
   | f = FOO
-    { EFoo(f) }
+    { [EFoo(f)] }

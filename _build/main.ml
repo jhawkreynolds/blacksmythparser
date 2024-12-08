@@ -29,4 +29,4 @@ let main =
        exit 1
   in
     let _ = res in
-    Printf.printf "%s\n" (pprint_expr res)
+    Printf.printf "%s\n" (pprint (unduplicate res))
