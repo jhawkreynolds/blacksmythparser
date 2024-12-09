@@ -1,0 +1,2 @@
+append : NatList -> NatList -> NatList
+append xs ys =
