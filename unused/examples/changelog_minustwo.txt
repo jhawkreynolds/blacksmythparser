@@ -1,3 +1,1 @@
 max : Nat -> Nat -> Nat
-max m n =
-    ??
