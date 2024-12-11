@@ -8,6 +8,9 @@ type expr =
 let rec pprint_header = function
   | "max" -> sprintf "max : Nat -> Nat -> Nat\n" ^ "max m n =\n" ^ "    ??\n"
   | "min" -> sprintf "min : Nat -> Nat -> Nat\n" ^ "min m n =\n" ^ "    ??\n"
+  | "compare" -> sprintf "compare : Nat -> Nat -> Cmp\n" ^ "compare n1 n2 =\n" ^ "    ??\n"
+  | "plus" -> sprintf "plus : Nat -> Nat -> Nat\n" ^ "plus m n =\n" ^ "    ??\n"
+  | "append" -> sprintf "append : NatList -> NatList -> NatList\n" ^ "append xs ys =\n" ^ "    ??\n"
   | _ -> sprintf "error: function unknown"
 
 let rec pprint_expr = function
