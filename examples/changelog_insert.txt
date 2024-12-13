@@ -1,2 +1,1 @@
 compare : Nat -> Nat -> Cmp
-
